@@ -1,0 +1,26 @@
+<div class="main-wrapper">
+    <app-modal-connection></app-modal-connection>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <div class="logo-header">
+                    <a class="brand-logo center" [routerLink]="['/']"><img
+                            src="../../../assets/img/Catch-The-Pokemon.png" alt="Pokemon Title" /></a>
+                </div>
+                <!-- <a [routerLink]="['/']"  class="brand-logo center">Pokemon List App</a> -->
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
+
+    <div class="footer-bottom"></div>
+
+    <footer class="page-footer">
+        <div class="container footer-text">
+            © 2020 designed by R3D
+        </div>
+    </footer>
+</div>

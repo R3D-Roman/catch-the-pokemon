@@ -1,0 +1,14 @@
+<div *ngIf="status === 'ONLINE' || status === 'OFFLINE'" [ngClass]="{
+    'modal-connect-container': true,
+    online: status === 'ONLINE',
+    offline: status === 'OFFLINE'
+  }" [@OffOnLineAnime]="OffOnLineAnime" [@OffOnLineAnimeHide]="OffOnLineAnimeHide">
+    <div class="modal-connect">
+        <p class="center" *ngIf="status === 'ONLINE'; else offline">
+            You are back... ONLINE connection is restored!!!
+        </p>
+        <ng-template #offline>
+            <p class="center">You are OFFLINE right now!!!</p>
+        </ng-template>
+    </div>
+</div>

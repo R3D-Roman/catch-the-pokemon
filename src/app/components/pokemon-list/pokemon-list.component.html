@@ -1,0 +1,53 @@
+<div class="flex-container" *ngIf="searchText !== ''; else showFilter">
+    <div class="flex-card" *ngFor="let pokemon of pokemonList | search: searchText">
+        <div class="card center">
+            <div class="card-image">
+                <img src="https://pokeres.bastionbot.org/images/pokemon/{{
+            pokemon.id
+          }}.png" alt="pokemon" />
+            </div>
+            <div class="card-content">
+                <p class="poke-name">{{ pokemon.name | uppercase }}</p>
+            </div>
+            <div class="card-action">
+                <button class="waves-effect waves-light btn" [routerLink]="['/card', pokemon.id]">
+                    More Info
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #showFilter>
+    <div class="flex-container" *ngIf="items.length; else loading">
+        <div class="flex-card" *ngFor="let pokemon of pageOfItems">
+            <div class="card center">
+                <div class="card-image">
+                    <img src="https://pokeres.bastionbot.org/images/pokemon/{{
+              pokemon.id
+            }}.png" alt="pokemon" />
+                </div>
+                <div class="card-content">
+                    <p class="poke-name">{{ pokemon.name | uppercase }}</p>
+                </div>
+                <div class="card-action">
+                    <button class="waves-effect waves-light btn" [routerLink]="['/card', pokemon.id]">
+                        Pokemon Info
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <jw-pagination [items]="items" (changePage)="onChangePage($event)" (click)="pageToTop()">
+                </jw-pagination>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #loading>
+    <div class="img-container center">
+        <img src="../../../assets/img/pikachu_loading.png" alt="" />
+    </div>
+</ng-template>

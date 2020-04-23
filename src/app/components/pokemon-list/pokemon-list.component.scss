@@ -1,0 +1,63 @@
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .flex-card {
+    flex-basis: 90%;
+    margin: 0;
+  }
+
+  .card {
+    background-color: rgb(255, 255, 141);
+    font-family: "Press Start 2P", cursive;
+    box-shadow: 8px -3px 10px rgb(34, 34, 34);
+    border-radius: 10px;
+    .card-image {
+      padding: 10px 0;
+      width: 60%;
+      margin: 0 auto;
+      img {
+        width: 100%;
+      }
+    }
+
+    .poke-name {
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+
+    .card-action {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(0, 191, 165);
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    button {
+      font-weight: bold;
+      background-color: rgb(238, 110, 115);
+    }
+
+    @media (min-width: 768px) {
+      .poke-name {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+@media (min-width: 600px) {
+  .flex-container {
+    .flex-card {
+      flex-basis: 45%;
+      margin: 0 0.6rem;
+    }
+  }
+}
+
+.img-container {
+  animation: wobble-hor-bottom 0.8s infinite both;
+}

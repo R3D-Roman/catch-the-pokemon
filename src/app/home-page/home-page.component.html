@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="input-field col s6 offset-s3 input">
+        <i class="material-icons search">search</i>
+        <input [(ngModel)]="searchText" id="search" type="text" placeholder="search..." autocomplete="off" />
+    </div>
+</div>
+
+
+<div>
+    <app-pokemon-list [pokemonList]="pokemonList" [items]="pokemonList" [searchText]="searchText">
+    </app-pokemon-list>
+
+</div>
