@@ -6,7 +6,7 @@ import { PokemonList } from './interface';
 })
 export class SearchPipe implements PipeTransform {
 
-  transform(lists: PokemonList[], search: string = ""): PokemonList[] {
+  transform(lists: any[], search: string = ""): PokemonList[] {
     if(!search.trim()) {
       return lists;
     }
