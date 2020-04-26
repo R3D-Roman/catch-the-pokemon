@@ -3,7 +3,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Ultra&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Signika&display=swap");
 
-
 @-webkit-keyframes wobble-hor-bottom {
   0%,
   100% {
@@ -63,12 +62,15 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  box-sizing: border-box;
   font-size: 1rem;
   font-family: "Signika", sans-serif;
 }
