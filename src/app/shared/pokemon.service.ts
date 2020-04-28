@@ -24,7 +24,6 @@ export class PokemonService {
       .pipe(
         expand(({ next }) => (next ? this.http.get<Pokemon>(next) : of())),
         take(50),
-        delay(2300),
         catchError((err) => {
           console.log("error in source. Details: " + err);
           return throwError(err);

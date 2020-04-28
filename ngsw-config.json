@@ -38,8 +38,8 @@
       "urls": ["https://pokeapi.co/api/v2/pokemon?offset=0&limit=150"],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 50,
-        "maxAge": "1h"
+        "maxSize": 160,
+        "maxAge": "6h"
       }
     }
   ]

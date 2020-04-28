@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Pokemon, PokemonList } from "../shared/interface";
 import { PokemonService } from "../shared/pokemon.service";
-import { Subscription } from 'rxjs';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-home-page",
@@ -21,26 +21,30 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.pokemonService.fetchPages().subscribe(
       (data) => {
         // console.log("Data from ngOnInit: ", data);
-        this.list = data;
-        this.pokemonList = this.pokemonList.concat(data.results).slice(0, 150);
-        let counter = 1;
-        this.pokemonList = this.pokemonList.map((res) => {
-          return {
-            ...res,
-            id: counter++,
-          };
-        });
-        // console.log(this.pokemonList);
+        setTimeout(() => {
+          this.list = data;
+          this.pokemonList = this.pokemonList
+            .concat(data.results)
+            .slice(0, 150);
+          let counter = 1;
+          this.pokemonList = this.pokemonList.map((res) => {
+            return {
+              ...res,
+              id: counter++,
+            };
+          });
+          // console.log(this.pokemonList);
+        }, 3500);
       },
       (error) => {
         console.log(error.message);
-      });
+      }
+    );
   }
 
   ngOnDestroy() {
-    if(this.pSub) {
+    if (this.pSub) {
       this.pSub.unsubscribe();
     }
   }
-
 }
