@@ -15,7 +15,7 @@
         ],
         "urls": [
           "https://fonts.googleapis.com/**",
-          "http://fonts.googleapis.com/icon?family=Material+Icons",
+          "https://fonts.gstatic.com/**",
           "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
         ]
       }
