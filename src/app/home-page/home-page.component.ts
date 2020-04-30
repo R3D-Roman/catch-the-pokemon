@@ -23,16 +23,15 @@ export class HomePageComponent implements OnInit, OnDestroy {
         // console.log("Data from ngOnInit: ", data);
         setTimeout(() => {
           this.list = data;
+          let counter = 1;
           this.pokemonList = this.pokemonList
             .concat(data.results)
-            .slice(0, 150);
-          let counter = 1;
-          this.pokemonList = this.pokemonList.map((res) => {
-            return {
-              ...res,
-              id: counter++,
-            };
-          });
+            .slice(0, 150).map((res) => {
+                return {
+                  ...res,
+                  id: counter++,
+                };
+              });
           // console.log(this.pokemonList);
         }, 3500);
       },
