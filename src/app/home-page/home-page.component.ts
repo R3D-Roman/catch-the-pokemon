@@ -25,7 +25,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
           this.list = data;
           let counter = 1;
           this.pokemonList = this.pokemonList
-            .concat(data.results)
+            .concat(this.list.results)
             .slice(0, 150).map((res) => {
                 return {
                   ...res,
