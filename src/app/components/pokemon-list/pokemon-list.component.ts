@@ -1,26 +1,23 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { PokemonList } from "src/app/shared/interface";
-import { ConnectionInternetService } from 'src/app/shared/connection-internet.service';
+import { ConnectionInternetService } from "src/app/shared/connection-internet.service";
 
 @Component({
   selector: "app-pokemon-list",
   templateUrl: "./pokemon-list.component.html",
-  styleUrls: ["./pokemon-list.component.scss"]
+  styleUrls: ["./pokemon-list.component.scss"],
 })
 export class PokemonListComponent implements OnInit {
   @Input() pokemonList: PokemonList[];
-  @Input() items: Array<any> = [];
+  @Input() items: any[] = [];
   @Input() searchText = "";
   pageOfItems: Array<any> = [];
   isConnected: boolean = true;
 
-
-  constructor(
-    private connectionInternetService: ConnectionInternetService
-  ) {}
+  constructor(private connectionInternetService: ConnectionInternetService) {}
 
   ngOnInit() {
-    this.connectionInternetService.conect$.subscribe((isConnected) => {
+    this.connectionInternetService.connect$.subscribe((isConnected) => {
       this.isConnected = isConnected;
       if (this.isConnected) {
         isConnected = true;
@@ -31,10 +28,16 @@ export class PokemonListComponent implements OnInit {
   }
 
   onChangePage(pageOfItems: Array<any>) {
-      this.pageOfItems = pageOfItems;
+    this.pageOfItems = pageOfItems;
+  }
+
+  trackById(index: number, el: any) {
+    return el.id;
   }
 
   pageToTop() {
-    window.scrollTo(0, 0);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 250);
   }
 }

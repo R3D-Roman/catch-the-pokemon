@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Pokemon, PokemonList } from "../shared/interface";
 import { PokemonService } from "../shared/pokemon.service";
-import { Subscription } from "rxjs";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-home-page",
@@ -9,41 +10,30 @@ import { Subscription } from "rxjs";
   styleUrls: ["./home-page.component.scss"],
 })
 export class HomePageComponent implements OnInit, OnDestroy {
-  list: Pokemon;
   pokemonList: PokemonList[] = [];
+  private id = 1;
+  private pokemonList$: Observable<PokemonList[]> = this.pokemonService
+    .fetchPages()
+    .pipe(
+      map((x: Pokemon) => {
+        this.pokemonList = [...this.pokemonList, ...x.results];
+        if (this.pokemonList.length === 180) {
+          this.pokemonList = this.pokemonList.slice(0, 150).map((res) => ({
+            ...res,
+            id: this.id++,
+          }));
+        }
+        return this.pokemonList;
+      })
+    );
   flat: boolean = false;
-  pSub: Subscription;
   searchText: string = "";
 
   constructor(private pokemonService: PokemonService) {}
 
   ngOnInit() {
-    this.pokemonService.fetchPages().subscribe(
-      (data) => {
-        // console.log("Data from ngOnInit: ", data);
-        setTimeout(() => {
-          this.list = data;
-          let counter = 1;
-          this.pokemonList = this.pokemonList
-            .concat(this.list.results)
-            .slice(0, 150).map((res) => {
-                return {
-                  ...res,
-                  id: counter++,
-                };
-              });
-          // console.log(this.pokemonList);
-        }, 3500);
-      },
-      (error) => {
-        console.log(error.message);
-      }
-    );
+    this.pokemonList$.subscribe();
   }
 
-  ngOnDestroy() {
-    if (this.pSub) {
-      this.pSub.unsubscribe();
-    }
-  }
+  ngOnDestroy() {}
 }

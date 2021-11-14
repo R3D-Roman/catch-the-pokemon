@@ -1,38 +1,52 @@
+<a name="top"></a>
 <div class="flex-container" *ngIf="items.length; else loading">
-    <div class="flex-card" *ngFor="let pokemon of pageOfItems">
-        <div class="card center">
-            <div class="card-image">
-                <img src="https://pokeres.bastionbot.org/images/pokemon/{{
-          pokemon.id
-        }}.png" alt="pokemon" />
-            </div>
-            <div class="card-content">
-                <p class="poke-name">{{ pokemon.name | uppercase }}</p>
-            </div>
-            <div class="card-action">
-                <button class="waves-effect waves-light btn" [routerLink]="['/card', pokemon.id]">
-                    Pokemon Info
-                </button>
-            </div>
-        </div>
+  <div
+    class="flex-card"
+    *ngFor="let pokemon of pageOfItems; trackBy: trackById"
+  >
+    <div class="card center">
+      <div class="card-image">
+        <img
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/{{
+            pokemon.id
+          }}.png"
+          alt="pokemon"
+          *ngIf="pokemon.id"
+        />
+      </div>
+      <div class="card-content">
+        <p class="poke-name">{{ pokemon.name | uppercase }}</p>
+      </div>
+      <div class="card-action">
+        <button
+          class="waves-effect waves-light btn"
+          [routerLink]="['/card', pokemon.id]"
+        >
+          Pokemon Info
+        </button>
+      </div>
     </div>
+  </div>
 </div>
-
 <div class="row">
-    <div class="col s12">
-        <jw-pagination [items]="items | search: searchText" (changePage)="onChangePage($event)" (click)="pageToTop()">
-        </jw-pagination>
-    </div>
+  <div class="col s12">
+    <jw-pagination
+      [items]="items | search: searchText"
+      (changePage)="onChangePage($event)"
+      (click)="pageToTop()"
+    >
+    </jw-pagination>
+  </div>
 </div>
 
 <ng-container *ngIf="!pageOfItems.length && searchText !== ''">
-    <div class="no-search-results">
-        <p class="center">Sorry, no matches found with your Pokemon!!!</p>
-    </div>
+  <div class="no-search-results">
+    <p class="center">Sorry, no matches found with your Pokemon!!!</p>
+  </div>
 </ng-container>
 
 <ng-template #loading>
-<div class="img-container center">
+  <div class="img-container center">
     <img src="../../../assets/img/pikachu_loading.png" alt="" />
-</div>
+  </div>
 </ng-template>

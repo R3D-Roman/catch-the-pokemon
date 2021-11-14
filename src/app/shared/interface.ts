@@ -1,17 +1,5 @@
 export interface PokemonList {
   name: string;
-  // rotation_period: string;
-  // orbital_period: string;
-  // diameter: string;
-  // climate: string;
-  // gravity: string;
-  // terrain: string;
-  // surface_water: string;
-  // population: string;
-  // residents: string[];
-  // films: string[];
-  // created: string;
-  // edited: string;
   url: string;
   id?: number;
 }
@@ -36,7 +24,7 @@ export interface AbilityEffects {
 export interface EffectEntries {
   effect: string;
   short_effect: string;
-} 
+}
 
 export interface Moves {
   move: {
@@ -54,8 +42,7 @@ export interface MovesInfoText {
 }
 
 export interface PokemonDetails {
-  
-  abilities?: Ability [];
+  abilities?: Ability[];
   forms?: [];
   game_indices?: [];
   id?: number;
@@ -71,5 +58,19 @@ export interface PokemonDetails {
   stats?: [];
   types?: [];
   weight: number;
+}
 
+export interface PokemonDetailsImg {
+  other: {
+    home: {
+      front_shiny: string;
+    };
+  };
+}
+
+export interface PokemonAbilities {
+  infoPokemon: PokemonDetails;
+  abilities: Ability[];
+  moves: Moves[];
+  sprites: PokemonDetailsImg;
 }

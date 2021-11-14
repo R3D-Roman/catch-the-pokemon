@@ -1,17 +1,15 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PokemonService } from "../shared/pokemon.service";
 import { ActivatedRoute, Params } from "@angular/router";
-import { switchMap } from "rxjs/operators";
+import { delay, map, switchMap, take, tap } from "rxjs/operators";
 import {
-  PokemonDetails,
-  Ability,
-  Moves,
   MovesInfoText,
   EffectEntries,
+  PokemonAbilities,
 } from "../shared/interface";
 
 import { listAnimation, bounceModal } from "../shared/animations";
-import { Subscription } from "rxjs";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-list-page",
@@ -20,60 +18,51 @@ import { Subscription } from "rxjs";
   animations: [listAnimation, bounceModal],
 })
 export class ListPageComponent implements OnInit, OnDestroy {
-  infoPokemon: PokemonDetails;
-  ability: Ability[] = [];
-  moves: Moves[] = [];
   pokemonMoves: MovesInfoText[] = [];
+  pokemonAbilities$: Observable<PokemonAbilities> = this.route.params.pipe(
+    switchMap((params: Params) =>
+      this.pokemonService.fetchUrlInfo(params["id"]).pipe(
+        map((x: PokemonAbilities) => ({
+          ...x,
+          moves: x.moves.slice(0, 5),
+        })),
+        delay(500)
+      )
+    )
+  );
   abilityEffects: EffectEntries[] = [];
-  num: number = 0;
-  listopen: boolean = false;
-  idList: number = 0;
-  modal: boolean = false;
-  listAnimation: any;
-  deskTopBounceModal: any;
-  mobilebounce: any;
-  allSub: Subscription;
-  moveSub: Subscription;
-  modalSub: Subscription;
-  showListOfPokemon: any;
+  listOpen = false;
+  idList = 0;
+  modal = false;
 
   constructor(
     private route: ActivatedRoute,
     private pokemonService: PokemonService
   ) {}
 
-  ngOnInit() {
-    this.allSub = this.route.params
-      .pipe(
-        switchMap((params: Params) => {
-          // console.log(params);
-          return this.pokemonService.fetchUrlInfo(params["id"]);
-        })
-      )
-      .subscribe((data) => {
-        // console.log(data);
-        this.infoPokemon = data;
-        this.num = data.id;
-        this.ability = data.abilities;
-        this.moves = data.moves.slice(0, 5);
-      });
-  }
+  ngOnInit() {}
+
+  ngOnDestroy() {}
+
   getMoves(url: string, id: number) {
-    if (!this.listopen || this.idList !== id) {
-      this.moveSub = this.pokemonService.fetchMoves(url).subscribe((data) => {
-        // console.log(data.effect_entries);
-        this.pokemonMoves = data.effect_entries;
-        this.idList = id;
-        this.listopen = true;
-      });
+    if (!this.listOpen || this.idList !== id) {
+      this.pokemonService
+        .fetchMoves(url)
+        .pipe(take(1))
+        .subscribe((data) => {
+          this.pokemonMoves = data.effect_entries;
+          this.idList = id;
+          this.listOpen = true;
+        });
     } else {
-      this.listopen = false;
+      this.listOpen = false;
     }
   }
 
   openModalFetch(url: string) {
-    this.modalSub = this.pokemonService
+    this.pokemonService
       .fetchAbilities(url)
+      .pipe(take(1))
       .subscribe((data) => {
         this.abilityEffects = data.effect_entries;
       });
@@ -84,18 +73,5 @@ export class ListPageComponent implements OnInit, OnDestroy {
   closeModal() {
     this.modal = false;
     this.abilityEffects = [];
-  }
-
-  ngOnDestroy() {
-    if (this.allSub) {
-      this.allSub.unsubscribe();
-    }
-
-    if (this.moveSub) {
-      this.moveSub.unsubscribe();
-    }
-    if (this.modalSub) {
-      this.modalSub.unsubscribe();
-    }
   }
 }

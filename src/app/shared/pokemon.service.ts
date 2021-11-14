@@ -6,8 +6,9 @@ import {
   take,
   expand,
   delay,
+  tap,
 } from "rxjs/operators";
-import { Pokemon, PokemonDetails, MovesInfo, AbilityEffects } from "./interface";
+import { Pokemon, PokemonDetails, MovesInfo, AbilityEffects, PokemonAbilities } from "./interface";
 
 @Injectable({
   providedIn: "root",
@@ -23,7 +24,7 @@ export class PokemonService {
       .get<Pokemon>(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=20`)
       .pipe(
         expand(({ next }) => (next ? this.http.get<Pokemon>(next) : of())),
-        take(50),
+        take(9),
         catchError((err) => {
           console.log("error in source. Details: " + err);
           return throwError(err);
@@ -31,8 +32,8 @@ export class PokemonService {
       );
   }
 
-  fetchUrlInfo(id: number): Observable<PokemonDetails> {
-    return this.http.get<PokemonDetails>(`https://pokeapi.co/api/v2/pokemon/${id}/`)
+  fetchUrlInfo(id: number): Observable<PokemonAbilities> {
+    return this.http.get<PokemonAbilities>(`https://pokeapi.co/api/v2/pokemon/${id}/`)
     .pipe(
       delay(1000),
       catchError((err) => {

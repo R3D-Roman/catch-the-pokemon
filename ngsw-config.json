@@ -14,6 +14,7 @@
           "/*.js"
         ],
         "urls": [
+          "https://fonts.googleapis.com/icon?family=Material+Icons",
           "https://fonts.googleapis.com/**",
           "https://fonts.gstatic.com/**",
           "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
@@ -35,10 +36,12 @@
   "dataGroups": [
     {
       "name": "pokemon-api",
-      "urls": ["https://pokeapi.co/api/v2/pokemon?offset=0&limit=150"],
+      "urls": [
+        "https://pokeapi.co/api/v2/pokemon?offset=0&limit=150"
+      ],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 160,
+        "maxSize": 300,
         "maxAge": "6h"
       }
     }

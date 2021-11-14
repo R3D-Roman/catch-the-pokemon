@@ -5,8 +5,8 @@ import { ConnectionService } from 'ng-connection-service';
   providedIn: 'root'
 })
 export class ConnectionInternetService {
-conect$: any;
+connect$: any;
   constructor(private connectionService: ConnectionService) {
-    this.conect$ = this.connectionService.monitor();
+    this.connect$ = this.connectionService.monitor();
    }
 }

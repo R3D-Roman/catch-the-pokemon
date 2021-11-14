@@ -6,16 +6,7 @@ import {
   useAnimation,
   keyframes,
 } from "@angular/animations";
-import {
-  fadeInDown,
-  fadeInLeft,
-  fadeOut,
-  flipInX,
-  flipInY,
-  fadeOutUp,
-  slideOutDown,
-  slideInDown,
-} from "ng-animate";
+import { fadeOut, slideInDown } from "ng-animate";
 
 export const listAnimation = trigger("listAnimation", [
   transition(":enter", [
@@ -94,9 +85,14 @@ export const OffOnLineAnime = trigger("OffOnLineAnime", [
   ),
 ]);
 
-export const OffOnLineAnimeHide = trigger('OffOnLineAnimeHide', [transition(':leave', useAnimation(fadeOut, {
-  params: {
-    delay: 1.8,
-    timing: 0.7,
-  }
-}))])
+export const OffOnLineAnimeHide = trigger("OffOnLineAnimeHide", [
+  transition(
+    ":leave",
+    useAnimation(fadeOut, {
+      params: {
+        delay: 1.8,
+        timing: 0.7,
+      },
+    })
+  ),
+]);

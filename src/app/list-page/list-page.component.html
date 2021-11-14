@@ -1,130 +1,137 @@
-<div *ngIf="ability.length; else loading">
-    <div *ngIf="modal" class="backdrop-block"></div>
-    <div *ngIf="modal && abilityEffects.length" class="modal-block" [@bounceModal]="deskTopBounceModal">
-        <h4 class="center">Effects Of Pokemon Power</h4>
-        <div *ngFor="let abilityEffect of abilityEffects">
-            <p class="center">{{ abilityEffect.effect }}</p>
+<div *ngIf="pokemonAbilities$ | async as pokemonAbilities; else loading">
+  <div *ngIf="modal" class="backdrop-block"></div>
+  <div
+    *ngIf="modal && abilityEffects.length"
+    class="modal-block"
+    [@bounceModal]
+  >
+    <h4 class="center">Effects Of Pokemon Power</h4>
+    <div *ngFor="let abilityEffect of abilityEffects">
+      <p class="center">{{ abilityEffect.effect }}</p>
+    </div>
+    <button class="btn btn-modal" (click)="closeModal()">Close</button>
+  </div>
+
+  <div class="container" *ngIf="pokemonAbilities.abilities.length">
+    <h4 class="center-align info-poke-name">
+      {{ pokemonAbilities.infoPokemon?.name | titlecase }}
+    </h4>
+    <div class="row">
+      <div class="col s12">
+        <div class="info-wrapper">
+          <div class="img">
+            <img
+              [src]="pokemonAbilities.sprites.other.home.front_shiny"
+              alt="pokemon"
+            />
+          </div>
+
+          <div class="ability-wrapper">
+            <ul class="collection">
+              <li
+                class="collection-item"
+                *ngFor="let abilities of pokemonAbilities.abilities"
+                (click)="openModalFetch(abilities.ability.url)"
+              >
+                Ability: {{ abilities.ability.name | titlecase }}
+                <i class="material-icons icon-collect">touch_app</i>
+              </li>
+              <li class="collection-item" [routerLink]="['/']">
+                Main Page<i class="material-icons icon-collect exit"
+                  >exit_to_app</i
+                >
+              </li>
+            </ul>
+          </div>
         </div>
-        <button class="btn btn-modal" (click)="closeModal()">Close</button>
+      </div>
     </div>
 
-    <div class="container" *ngIf="ability.length">
-        <h4 class="center-align info-poke-name">
-            {{ infoPokemon?.name | titlecase }}
-        </h4>
-
-        <div class="row">
-            <div class="col s12">
-                <div class="info-wrapper">
-                    <div class="img" *ngIf="num > 0">
-                        <img src="https://pokeres.bastionbot.org/images/pokemon/{{ num }}.png" alt="pokemon" />
-                    </div>
-
-                    <div class="ability-wrapper">
-                        <ul class="collection">
-                            <li class="collection-item" *ngFor="let abilities of ability"
-                                (click)="openModalFetch(abilities.ability.url)">
-                                Ability: {{ abilities.ability.name | titlecase }}
-                                <i class="material-icons icon-collect">touch_app</i>
-                            </li>
-                            <li class="collection-item" [routerLink]="['/']">
-                                Main Page<i class="material-icons icon-collect exit">exit_to_app</i>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+      <div class="col s12">
+        <div class="wrapper-indicators center">
+          <p>
+            <i class="material-icons">nature_people</i> Height:
+            <span class="height-weight">{{ pokemonAbilities.infoPokemon?.height * 10 }}cm</span>
+          </p>
+          <p>
+            <i class="material-icons">restaurant</i> Weight:
+            <span class="height-weight">{{ pokemonAbilities.infoPokemon?.weight / 10 }}kg</span>
+          </p>
         </div>
+      </div>
+    </div>
 
-        <div class="row">
-            <div class="col s12">
-                <div class="wrapper-indicators center">
-                    <p>
-                        <i class="material-icons">nature_people</i> Height:
-                        <span class="height-weight">{{ infoPokemon?.height * 10 }}cm</span>
-                    </p>
-                    <p>
-                        <i class="material-icons">restaurant</i> Weight:
-                        <span class="height-weight">{{ infoPokemon?.weight / 10 }}kg</span>
-                    </p>
-                </div>
+    <div class="row">
+      <div class="col s12">
+        <ul class="collapsible">
+          <h4 class="center">Moves</h4>
+          <li
+            class="collapsible-li"
+            *ngFor="let move of pokemonAbilities.moves; let i = index"
+            (click)="getMoves(move.move.url, i)"
+          >
+            <div class="collapsible-header">
+              <p class="valign-wrapper">
+                <i class="material-icons game-icon">videogame_asset</i>
+                <span>{{ move.move.name | titlecase }}</span>
+              </p>
+              <i class="material-icons list-details">touch_app</i>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col s12">
-                <ul class="collapsible">
-                    <h4 class="center">Moves</h4>
-                    <li class="collapsible-li" *ngFor="let move of moves; let i = index"
-                        (click)="getMoves(move.move.url, i)">
-                        <div class="collapsible-header">
-                            <p class="valign-wrapper">
-                                <i class="material-icons game-icon">videogame_asset</i>
-                                <span>{{ move.move.name | titlecase }}</span>
-                            </p>
-                            <i class="material-icons list-details">touch_app</i>
-                        </div>
-
-                        <div class="drop-list-wrapper" *ngIf="listopen && i === idList"
-                            [@listAnimation]="listAnimation">
-                            <div class="drop-list" *ngFor="let pokemonMove of pokemonMoves">
-                                <i class="material-icons icon-open-drop">arrow_drop_down</i>
-                                <p class="move-effect">{{ pokemonMove.effect }}</p>
-                            </div>
-                        </div>
-                    </li>
-                    <div class="collapsible-header buttom-list">
-                        <span>End Of The List</span>
-                    </div>
-                </ul>
+            <div
+              class="drop-list-wrapper"
+              *ngIf="listOpen && i === idList"
+              [@listAnimation]
+            >
+              <div class="drop-list" *ngFor="let pokemonMove of pokemonMoves">
+                <i class="material-icons icon-open-drop">arrow_drop_down</i>
+                <p class="move-effect">{{ pokemonMove.effect }}</p>
+              </div>
             </div>
-        </div><!-- row -->
-    </div><!-- container div -->
+          </li>
+          <div class="collapsible-header buttom-list">
+            <span>End Of The List</span>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
 
+  <div class="about-poke">
+    <div class="card-panel card-pokemon-text white-text">
+      <h5 class="card-title center">Pokemon:</h5>
+      <p>
+        Its been more than 15 years since we have discovered a magical world of
+        Pokemon. Nowadays, the Pokemon industry includes Trading Card Game,
+        cartoons, movies, video games, toys, accessories, comics and
+        applications to mention but a few. Pokemon games are aimed at the
+        enhancement of logical and strategic thinking, which also helps in
+        developing math skills. The strategy of Pokemons supports healthy
+        competition, strive to leadership and tolerance towards other players.
+        Reading is essential in most Pokemon games thus, Pokemon stimulate the
+        desire to learn.
+      </p>
+    </div>
 
-
-    <div class="about-poke">
-        
-            <div class="card-panel card-pokemon-text white-text">
-                <h5 class="card-title center">Pokemon:</h5>
-                <p>
-                    Its been more than 15 years since we have discovered a magical world of
-                    Pokemon. Nowadays, the Pokemon industry includes Trading Card Game,
-                    cartoons, movies, video games, toys, accessories, comics and
-                    applications to mention but a few. Pokemon games are aimed at the
-                    enhancement of logical and strategic thinking, which also helps in
-                    developing math skills. The strategy of Pokemons supports healthy
-                    competition, strive to leadership and tolerance towards other players.
-                    Reading is essential in most Pokemon games thus, Pokemon stimulate the
-                    desire to learn.
-                </p>
-            </div>
-        
-    
-       
-            <div class="card-panel card-pokemon-text white-text">
-                <h5 class="card-title center">What Are Pokémon?</h5>
-                <p>
-                    Pokemon are numerous creatures that are believed to live alongside
-                    humans. They are represented in versatile shapes, colors, and sizes. In
-                    most cases, Pokemon's speech skills are limited to the utterance of
-                    their name only. These fantastic creatures are owned and raised by the
-                    "Trainers". During their adventures, Pokemon may also gain new skills
-                    and as a result, evolve into more developed Pokemon. Currently, the
-                    Pokemon universe counts more than 700 individuals.
-                </p>
-            </div>
-        
-    </div><!-- row -->
-
-
-
-</div><!-- ngIf div -->
-
-
+    <div class="card-panel card-pokemon-text white-text">
+      <h5 class="card-title center">What Are Pokémon?</h5>
+      <p>
+        Pokemon are numerous creatures that are believed to live alongside
+        humans. They are represented in versatile shapes, colors, and sizes. In
+        most cases, Pokemon's speech skills are limited to the utterance of
+        their name only. These fantastic creatures are owned and raised by the
+        "Trainers". During their adventures, Pokemon may also gain new skills
+        and as a result, evolve into more developed Pokemon. Currently, the
+        Pokemon universe counts more than 700 individuals.
+      </p>
+    </div>
+  </div>
+</div>
 
 <ng-template #loading>
-    <div class="img-container center">
-        <img src="../../../assets/img/pikachu_loading.png" alt="" />
-    </div>
+  <div class="img-container center">
+    <img src="../../../assets/img/pikachu_loading.png" alt="" />
+  </div>
 </ng-template>
+
